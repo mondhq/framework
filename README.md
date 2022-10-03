@@ -1,72 +1,89 @@
 <div align="center">
 
-# @blazingworks/helloworld
+![Logo](https://raw.githubusercontent.com/mondhq/framework/master/.github/assets/banner.png)
 
-![Lines of code](https://img.shields.io/tokei/lines/github/blazingworks/helloworld?style=for-the-badge)
-![npm Downloads](https://img.shields.io/npm/dy/@blazingworks/helloworld?style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/blazingworks/helloworld?style=for-the-badge)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/blazingworks/helloworld?style=for-the-badge)
-![GitHub](https://img.shields.io/github/license/blazingworks/helloworld?style=for-the-badge)
-![GitHub Repo stars](https://img.shields.io/github/stars/blazingworks/helloworld?style=for-the-badge)
-![npm Version](https://img.shields.io/npm/v/@blazingworks/helloworld?style=for-the-badge)
-![GitHub contributors](https://img.shields.io/github/contributors/blazingworks/helloworld?style=for-the-badge)
+<br />
+
+![Lines of code](https://img.shields.io/tokei/lines/github/mondhq/framework)
+![npm Downloads](https://img.shields.io/npm/dy/@mondhq/framework)
+![GitHub issues](https://img.shields.io/github/issues/mondhq/framework)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/mondhq/framework)
+![GitHub](https://img.shields.io/github/license/mondhq/framework)
+![GitHub Repo stars](https://img.shields.io/github/stars/mondhq/framework)
+![npm Version](https://img.shields.io/npm/v/@mondhq/framework)
+![GitHub contributors](https://img.shields.io/github/contributors/mondhq/framework)
 
 </div>
 
-🌍 Hello World NPM Library by BlazingWorks, acts as a boilerplate for future libraries
+🌙 Mond Framework for modern Discord Bot Development
+
+> **⚠️ This project is still in development and is not ready for production use.**
+
+## About
+
+Mond is a modern Discord Bot Framework and acts as a wrapper around discord.js. It is designed to be easy to use and to make the development of Discord Bots easier.
 
 ## Tech Stack
 
--  [TypeScript](https://www.typescriptlang.org/)
--  [Jest](https://jestjs.io/)
--  [ESLint](https://eslint.org/)
--  [Prettier](https://prettier.io/)
+-   [TypeScript](https://www.typescriptlang.org/)
+-   [Jest](https://jestjs.io/)
+-   [ESLint](https://eslint.org/)
+-   [Prettier](https://prettier.io/)
 
+## Example Usage
 
-## Installation
+```ts
+import { Mond, MondEvent, MondCommand, MondEvents } from "@mondhq/framework";
+import { config as dotenv } from "dotenv";
+import { CommandInteraction } from "discord.js";
+dotenv();
 
-### NPM
+const mond = new Mond();
 
-```bash
-npm install @blazingworks/helloworld
+const readyEvent = new MondEvent()
+    .setName("myReadyEvent")
+    .setEvent(MondEvents.Ready)
+    .setHandler((mond: Mond) => {
+        mond.logger.info("Bot is Ready!");
+        mond.discordjs().user?.setActivity("with Mond 🌙");
+    });
+
+const pingCommand = new MondCommand()
+    .setName("ping")
+    .setDescription("Pong!")
+    .setHandler((_mond: Mond, interaction: CommandInteraction) => {
+        interaction.reply("Pong!");
+    });
+
+mond.registerMultiple(readyEvent, pingCommand);
+
+mond.deploy().then(() => {
+    mond.start();
+});
 ```
 
-### Yarn
+## Roadmap
 
-```bash
-yarn add @blazingworks/helloworld
-```
-
-## Usage
-
-### TypeScript
-
-```typescript
-import { helloWorld } from '@blazingworks/helloworld';
-
-console.log(helloWorld());
-// or
-console.log(helloWorld("Nagi Aoe"));
-```
-
-### JavaScript
-
-```javascript
-const { helloWorld } = require('@blazingworks/helloworld');
-
-console.log(helloWorld());
-// or
-console.log(helloWorld("Reiji Kurose"));
-```
+-   [x] Commands
+-   [x] Events
+-   [ ] Embeds
+-   [ ] Other Interactions
+    -   [ ] Buttons
+    -   [ ] Select Menus
+    -   [ ] Dropdown Actions
+    -   [ ] Modals
+-   [ ] Automatic loading elements from folders
+-   [ ] Message Commands
+-   [ ] Tests
 
 ## How to report issues/questions
 
-- For general issues/questions, [open an issue](https://github.com/blazingworks/helloworld/issues)
-- For security issues, please email [security@blazing.works](mailto:security@blazing.works)
-- For important questions, please email [opensource@blazing.works](mailto:opensource@blazing.works)
+-   For general issues/questions, [open an issue](https://github.com/mondhq/framework/issues)
+-   For security issues, please email [security@blazing.works](mailto:security@blazing.works)
+-   For important questions, please email [opensource@blazing.works](mailto:opensource@blazing.works)
 
 ## License
 
-As this is an open-source project, support is limited. Please use [GitHub Issues](https://github.com/blazingworks/helloworld/issues) for community support or contact [opensource@blazing.works](mailto:opensource@blazing.works) for very important matters.
+As this is an open-source project, support is limited. Please use [GitHub Issues](https://github.com/mondhq/framework/issues) for community support or contact [opensource@blazing.works](mailto:opensource@blazing.works) for very important matters.
 
 **ℹ️ All code in this repository is licensed under the [MIT License](LICENSE.md).**

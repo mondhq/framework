@@ -1,17 +1,18 @@
 {
-    "name": "@blazingworks/helloworld",
-    "version": "1.0.0",
-    "description": "Hello World NPM Library by BlazingWorks, acts as a boilerplate for future libraries",
-    "main": "dist/helloworld.js",
-    "types": "dist/helloworld.d.ts",
+    "name": "@mondhq/framework",
+    "version": "0.1.0",
+    "description": "🌙 Mond Framework for modern Discord Bot Development",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "files": [
         "dist/**/*"
     ],
-    "repository": "https://github.com/blazingworks/helloworld.git",
-    "author": "BlazingWorks",
+    "repository": "https://github.com/mondhq/framework.git",
+    "author": "Mond Team",
     "license": "MIT",
     "private": false,
     "scripts": {
+        "dev": "rimraf dist && tsc -w",
         "build": "rimraf dist && tsc",
         "prettier": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint src/**/*.ts",
@@ -29,5 +30,11 @@
         "rimraf": "^3.0.2",
         "ts-jest": "^29.0.3",
         "typescript": "^4.8.4"
+    },
+    "dependencies": {
+        "@blazingworks/logger": "^1.0.1",
+        "@blazingworks/logger-transport-prettyconsole": "^1.0.0",
+        "@blazingworks/utils": "^1.0.0",
+        "discord.js": "14"
     }
 }
