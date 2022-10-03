@@ -1,6 +1,8 @@
+> **⚠️ This project is still in development and is not ready for production use.**
+
 <div align="center">
 
-![Logo](https://raw.githubusercontent.com/mondhq/framework/master/.github/assets/banner.png)
+![Mond](https://raw.githubusercontent.com/mondhq/framework/main/.github/assets/banner.png)
 
 <br />
 
@@ -16,8 +18,6 @@
 </div>
 
 🌙 Mond Framework for modern Discord Bot Development
-
-> **⚠️ This project is still in development and is not ready for production use.**
 
 ## About
 
