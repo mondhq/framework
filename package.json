@@ -34,7 +34,7 @@
     "dependencies": {
         "@blazingworks/logger": "^1.0.1",
         "@blazingworks/logger-transport-prettyconsole": "^1.0.0",
-        "@blazingworks/utils": "^1.0.0",
+        "@blazingworks/utils": "^1.1.0",
         "discord.js": "14"
     }
 }
