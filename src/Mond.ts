@@ -8,7 +8,6 @@ import { BaseInteraction, Client as DiscordClient, REST, RESTPostAPIApplicationC
 import MondCommand from "./builders/MondCommand";
 import MondEvent from "./builders/MondEvent";
 import MondEvents from "./enum/MondEvents";
-import MondEmbed from "./builders/MondEmbed";
 
 export default class Mond {
     public logger: Logger;
@@ -23,7 +22,6 @@ export default class Mond {
 
     private commands: Map<string, MondCommand> = new Map();
     private events: Map<string, MondEvent> = new Map();
-    private embeds: Map<string, MondEmbed> = new Map();
 
     constructor() {
         // Setup Config
@@ -107,9 +105,7 @@ export default class Mond {
         }
     }
 
-    public register(builder: MondCommand | MondEvent): void;
-    public register(builder: MondEmbed, name: string): void;
-    public register(builder: MondCommand | MondEvent | MondEmbed, name?: string): void {
+    public register(builder: MondCommand | MondEvent): void {
         if (builder instanceof MondCommand) {
             if (!builder.isValid()) {
                 this.error("incompleteCommand");
@@ -124,13 +120,6 @@ export default class Mond {
             }
             this.events.set(builder.name, builder);
             this.logger.info(`Registered event ${builder.name}`);
-        } else if (builder instanceof MondEmbed) {
-            if (!name) {
-                this.error("missingEmbedName");
-                return;
-            }
-            this.embeds.set(name, builder);
-            this.logger.info(`Registered embed ${name}`);
         } else {
             throw new Error("Unhandled builder type provided to register()");
         }
