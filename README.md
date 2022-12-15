@@ -66,13 +66,15 @@ mond.deploy().then(() => {
 
 -   [x] Commands
 -   [x] Events
--   [ ] Embeds
+-   [x] Embeds
 -   [ ] Other Interactions
     -   [ ] Buttons
     -   [ ] Select Menus
     -   [ ] Dropdown Actions
     -   [ ] Modals
 -   [ ] Automatic loading elements from folders
+-   [ ] Color Management
+-   [ ] Better Formats (Footers, Titles, Messages, etc.)
 -   [ ] Message Commands
 -   [ ] Tests
 

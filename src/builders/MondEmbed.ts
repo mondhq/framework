@@ -1,16 +1,25 @@
-import { EmbedBuilder as DiscordEmbedBuilder } from "discord.js";
+import { EmbedBuilder as DiscordEmbedBuilder, User, ColorResolvable, EmbedField } from "discord.js";
+import { multiReplace } from "@blazingworks/utils/text";
 import Mond from "../Mond";
 
-export default class EmbedBuilder {
+export default class MondEmbed {
     private embed: DiscordEmbedBuilder;
+    private footerString: string | undefined;
+    private footerIcon: string | undefined;
+    private authorString: string | undefined;
+    private authorIcon: string | undefined;
 
     constructor() {
         this.embed = new DiscordEmbedBuilder();
     }
 
     public setTitle(title: string, useFormat = true) {
-        const titleFormat = Mond.config?.embeds?.titleFormat;
-        this.embed.setTitle(useFormat && titleFormat ? titleFormat.replace("%s", title) : title);
+        const titleFormat = Mond.config?.embeds?.titleFormat || "{title}";
+        if (useFormat) {
+            this.embed.setTitle(multiReplace(titleFormat, [["{title}", title]]));
+        } else {
+            this.embed.setTitle(title);
+        }
         return this;
     }
 
@@ -19,10 +28,24 @@ export default class EmbedBuilder {
         return this;
     }
 
-    /*
+    public setFooter(footer: string, useFormat = true, additionalData?: { user?: User }) {
+        const footerFormat = Mond.config?.embeds?.footerFormat || "{footer}";
+        if (useFormat) {
+            this.footerString = multiReplace(footerFormat, [
+                ["{footer}", footer],
+                ["{user.tag}", additionalData?.user?.tag || "Clyde#0000"],
+                ["{user.id}", additionalData?.user?.id || "000000000000000000"],
+                ["{user.name}", additionalData?.user?.username || "Clyde"],
+                ["{user.discriminator}", additionalData?.user?.discriminator || "0000"],
+            ]);
+        } else {
+            this.footerString = footer;
+        }
+        return this;
+    }
 
-    public setFooter(footer: string) {
-        this.embed.setFooter(footer);
+    public setFooterIcon(icon: string) {
+        this.footerIcon = icon;
         return this;
     }
 
@@ -32,11 +55,16 @@ export default class EmbedBuilder {
     }
 
     public setAuthor(author: string) {
-        this.embed.setAuthor(author);
+        this.authorString = author;
         return this;
     }
 
-    public setColor(color: string) {
+    public setAuthorIcon(icon: string) {
+        this.authorIcon = icon;
+        return this;
+    }
+
+    public setColor(color: ColorResolvable) {
         this.embed.setColor(color);
         return this;
     }
@@ -51,19 +79,32 @@ export default class EmbedBuilder {
         return this;
     }
 
-    public setFields(fields: EmbedField[]) {
-        this.embed.fields = fields;
-        return this;
-    }
-
+    /**
+     * @deprecated
+     */
     public addField(field: EmbedField) {
-        this.embed.addField(field);
+        this.embed.addFields(field);
         return this;
     }
 
-    */
+    public addFields(...fields: EmbedField[]) {
+        this.embed.addFields(...fields);
+        return this;
+    }
 
     public build() {
+        if (this.footerString) {
+            this.embed.setFooter({
+                text: this.footerString,
+                iconURL: this.footerIcon,
+            });
+        }
+        if (this.authorString) {
+            this.embed.setAuthor({
+                name: this.authorString,
+                iconURL: this.authorIcon,
+            });
+        }
         return this.embed;
     }
 }
