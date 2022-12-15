@@ -23,18 +23,20 @@ export default class Mond {
     private commands: Map<string, MondCommand> = new Map();
     private events: Map<string, MondEvent> = new Map();
 
-    constructor() {
+    constructor(logger?: Logger) {
         // Setup Config
         this.loadConfig();
 
         // Setup Logger
-        this.logger = new Logger({
-            transports: [
-                {
-                    module: new PrettyConsoleTransport(Mond.config.logger),
-                },
-            ],
-        });
+        this.logger = logger
+            ? logger
+            : new Logger({
+                  transports: [
+                      {
+                          module: new PrettyConsoleTransport(Mond.config.logger),
+                      },
+                  ],
+              });
 
         this.logger.info("Mond Client constructed");
 
@@ -98,7 +100,7 @@ export default class Mond {
                     this.logger.info("Commands deployed");
                     return Promise.resolve(true);
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.logger.error("Failed to deploy commands");
                     return Promise.resolve(false);
                 });
