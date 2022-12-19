@@ -17,14 +17,17 @@ export default class Mond {
         logger: {},
     };
 
+    private configName = "mond.config.json";
+
     private client: DiscordClient;
     private rest: REST;
 
     private commands: Map<string, MondCommand> = new Map();
     private events: Map<string, MondEvent> = new Map();
 
-    constructor(logger?: Logger) {
+    constructor(logger?: Logger, configName?: string) {
         // Setup Config
+        if (configName) this.configName = configName;
         this.loadConfig();
 
         // Setup Logger
@@ -136,7 +139,7 @@ export default class Mond {
     }
 
     private loadConfig() {
-        const configPath = path.join(process.cwd(), "mond.config.json");
+        const configPath = path.join(process.cwd(), this.configName);
         if (!fs.existsSync(configPath)) return;
         this.configLoaded = true;
 
