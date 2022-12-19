@@ -13,9 +13,17 @@ export default class Mond {
     public logger: Logger;
     private configValid = false;
     private configLoaded = false;
+
     public static config: MondConfig = {
+        clientIdKey: "MOND_CLIENT_ID",
+        tokenKey: "MOND_TOKEN",
         logger: {},
+        embeds: {},
     };
+
+    public instanceConfig = Mond.config;
+
+    private configName = "mond.config.json";
 
     private client: DiscordClient;
     private rest: REST;
@@ -23,8 +31,9 @@ export default class Mond {
     private commands: Map<string, MondCommand> = new Map();
     private events: Map<string, MondEvent> = new Map();
 
-    constructor(logger?: Logger) {
+    constructor(logger?: Logger, configName?: string) {
         // Setup Config
+        if (configName) this.configName = configName;
         this.loadConfig();
 
         // Setup Logger
@@ -33,7 +42,7 @@ export default class Mond {
             : new Logger({
                   transports: [
                       {
-                          module: new PrettyConsoleTransport(Mond.config.logger),
+                          module: new PrettyConsoleTransport(this.instanceConfig.logger),
                       },
                   ],
               });
@@ -46,7 +55,7 @@ export default class Mond {
         });
 
         // Create Discord REST
-        this.rest = new REST({ version: "10" }).setToken(process.env.MOND_TOKEN || "");
+        this.rest = new REST({ version: "10" }).setToken(process.env[this.instanceConfig.tokenKey || "MOND_TOKEN"] || "");
 
         // Warn if no config found or config is invalid
         if (!this.configLoaded) {
@@ -94,7 +103,7 @@ export default class Mond {
         } else {
             this.logger.info("Commands are outdated, deploying...");
             return this.rest
-                .put(Routes.applicationCommands(process.env.MOND_CLIENT_ID || ""), { body: commands })
+                .put(Routes.applicationCommands(process.env[this.instanceConfig.clientIdKey || "MOND_CLIENT_ID"] || ""), { body: commands })
                 .then(() => {
                     fs.writeFileSync(cachePath, JSON.stringify(commands));
                     this.logger.info("Commands deployed");
@@ -136,13 +145,14 @@ export default class Mond {
     }
 
     private loadConfig() {
-        const configPath = path.join(process.cwd(), "mond.config.json");
+        const configPath = path.join(process.cwd(), this.configName);
         if (!fs.existsSync(configPath)) return;
         this.configLoaded = true;
 
         const config = fs.readFileSync(configPath, "utf8");
 
         try {
+            this.instanceConfig = JSON.parse(config);
             Mond.config = JSON.parse(config);
             this.configValid = true;
         } catch (e) {

@@ -8,13 +8,15 @@ export default class MondEmbed {
     private footerIcon: string | undefined;
     private authorString: string | undefined;
     private authorIcon: string | undefined;
+    private client: Mond | undefined;
 
-    constructor() {
+    constructor(client?: Mond) {
         this.embed = new DiscordEmbedBuilder();
+        if (client) this.client = client;
     }
 
     public setTitle(title: string, useFormat = true) {
-        const titleFormat = Mond.config?.embeds?.titleFormat || "{title}";
+        const titleFormat = (this.client?.instanceConfig || Mond.config).embeds?.titleFormat || "{title}";
         if (useFormat) {
             this.embed.setTitle(multiReplace(titleFormat, [["{title}", title]]));
         } else {
@@ -29,7 +31,7 @@ export default class MondEmbed {
     }
 
     public setFooter(footer: string, useFormat = true, additionalData?: { user?: User }) {
-        const footerFormat = Mond.config?.embeds?.footerFormat || "{footer}";
+        const footerFormat = (this.client?.instanceConfig || Mond.config).embeds?.footerFormat || "{footer}";
         if (useFormat) {
             this.footerString = multiReplace(footerFormat, [
                 ["{footer}", footer],
