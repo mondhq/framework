@@ -15,6 +15,8 @@ export default class Mond {
     private configLoaded = false;
 
     public static config: MondConfig = {
+        clientIdKey: "MOND_CLIENT_ID",
+        tokenKey: "MOND_TOKEN",
         logger: {},
         embeds: {},
     };
@@ -53,7 +55,7 @@ export default class Mond {
         });
 
         // Create Discord REST
-        this.rest = new REST({ version: "10" }).setToken(process.env.MOND_TOKEN || "");
+        this.rest = new REST({ version: "10" }).setToken(process.env[this.instanceConfig.tokenKey || "MOND_TOKEN"] || "");
 
         // Warn if no config found or config is invalid
         if (!this.configLoaded) {
@@ -101,7 +103,7 @@ export default class Mond {
         } else {
             this.logger.info("Commands are outdated, deploying...");
             return this.rest
-                .put(Routes.applicationCommands(process.env.MOND_CLIENT_ID || ""), { body: commands })
+                .put(Routes.applicationCommands(process.env[this.instanceConfig.clientIdKey || "MOND_CLIENT_ID"] || ""), { body: commands })
                 .then(() => {
                     fs.writeFileSync(cachePath, JSON.stringify(commands));
                     this.logger.info("Commands deployed");
