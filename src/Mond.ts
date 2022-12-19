@@ -13,9 +13,13 @@ export default class Mond {
     public logger: Logger;
     private configValid = false;
     private configLoaded = false;
+
     public static config: MondConfig = {
         logger: {},
+        embeds: {},
     };
+
+    public instanceConfig = Mond.config;
 
     private configName = "mond.config.json";
 
@@ -36,7 +40,7 @@ export default class Mond {
             : new Logger({
                   transports: [
                       {
-                          module: new PrettyConsoleTransport(Mond.config.logger),
+                          module: new PrettyConsoleTransport(this.instanceConfig.logger),
                       },
                   ],
               });
@@ -146,6 +150,7 @@ export default class Mond {
         const config = fs.readFileSync(configPath, "utf8");
 
         try {
+            this.instanceConfig = JSON.parse(config);
             Mond.config = JSON.parse(config);
             this.configValid = true;
         } catch (e) {
