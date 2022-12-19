@@ -18,7 +18,8 @@
         "lint": "eslint src/**/*.ts",
         "prettier:ci": "prettier --check \"src/**/*.ts\"",
         "lint:ci": "eslint src/**/*.ts --quiet",
-        "test": "jest"
+        "test": "jest",
+        "prepublishOnly": "npm run-script build"
     },
     "devDependencies": {
         "@types/jest": "^29.1.1",
