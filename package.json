@@ -1,6 +1,6 @@
 {
     "name": "@mondhq/framework",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "🌙 Mond Framework for modern Discord Bot Development",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
