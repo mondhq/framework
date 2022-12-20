@@ -67,7 +67,7 @@ export default class Mond {
 
     public start() {
         this.logger.info("Starting Mond Client...");
-        this.client.login(process.env.MOND_TOKEN);
+        this.client.login(process.env[this.instanceConfig.tokenKey || "MOND_TOKEN"] || "");
 
         const interactionEvent = new MondEvent()
             .setName("mondInternal:interactionCreate")
