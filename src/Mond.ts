@@ -17,6 +17,7 @@ export default class Mond {
     public static config: MondConfig = {
         clientIdKey: "MOND_CLIENT_ID",
         tokenKey: "MOND_TOKEN",
+        cacheFileName: ".mondcache",
         logger: {},
         embeds: {},
     };
@@ -92,7 +93,7 @@ export default class Mond {
         this.commands.forEach((command) => {
             commands.push(command.toJSON());
         });
-        const cachePath = path.join(process.cwd(), ".mondcache");
+        const cachePath = path.join(process.cwd(), this.instanceConfig.cacheFileName || ".mondcache");
         let cache = "";
         if (fs.existsSync(cachePath)) {
             cache = fs.readFileSync(cachePath, "utf8");
